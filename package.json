@@ -1,0 +1,14 @@
+{
+  "name": "sdk-analytics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tracker.js",
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^3.4.1",
+    "ua-parser-js": "^1.0.35"
+  }
+}
