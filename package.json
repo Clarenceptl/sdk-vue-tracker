@@ -1,8 +1,8 @@
 {
-  "name": "sdk-analytics",
+  "name": "@sdk/vue-tracker",
   "version": "1.0.0",
   "description": "",
-  "main": "tracker.js",
+  "main": "index.js",
   "type": "module",
   "keywords": [],
   "author": "",

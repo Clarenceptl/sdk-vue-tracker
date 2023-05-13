@@ -20,7 +20,6 @@ const sendEvent = (data, type = "beacon") => {
 };
 
 const FingerprintJS = require("@fingerprintjs/fingerprintjs");
-
 const fpPromise = FingerprintJS.load();
 
 module.exports = {
@@ -72,4 +71,5 @@ module.exports = {
       },
     });
   },
+  sendEvent,
 };
