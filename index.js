@@ -1,4 +1,4 @@
-const fingerprintJS = require("@fingerprintjs/fingerprintjs");
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 export const sendEvent = (data, type = "beacon") => {
   const url = "http://localhost:3000/api/events";
@@ -21,13 +21,12 @@ export const sendEvent = (data, type = "beacon") => {
   }
 };
 
-function initTracker(Vue, options) {
+export default async function initTracker(Vue, options) {
   if (!options.APP_ID) {
     throw new Error("Please provide the APP_ID");
   }
 
-  const idVisitor = fingerprintJS
-    .load()
+  const idVisitor = FingerprintJS.load()
     .then((fp) => fp.get())
     .then((result) => {
       // This is the visitor identifier:
@@ -70,5 +69,3 @@ function initTracker(Vue, options) {
     },
   });
 }
-
-module.exports = initTracker;
