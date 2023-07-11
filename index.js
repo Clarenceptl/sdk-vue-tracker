@@ -15,55 +15,6 @@ const sendEvent = async (data, path) => {
   });
 };
 
-export const useMousePosition = async (options) => {
-  if (!options.APP_ID) {
-    throw new Error("Please provide the APP_ID");
-  }
-
-  const uaParser = new UAParser();
-  const idVisitor = (await (await FingerprintJS.load()).get()).visitorId;
-
-  if (!idVisitor) {
-    throw new Error("Error id visitor");
-  }
-  const configData = {
-    APP_ID: options.APP_ID,
-    service: options.service || "website",
-    visitorId: idVisitor,
-    uaParser: uaParser.getResult(),
-    session: 1,
-    // api endpoint
-  };
-  const x = ref(0);
-  const y = ref(0);
-
-  const updateMousePosition = throttle((event) => {
-    x.value = event.clientX;
-    y.value = event.clientY;
-
-    sendEvent(
-      {
-        ...configData,
-        type: "mouse",
-        data: {
-          x: event.clientX,
-          y: event.clientY,
-        },
-      },
-      "event/front"
-    );
-  }, 100);
-
-  onMounted(() => {
-    window.addEventListener("mousemove", updateMousePosition);
-  });
-
-  onUnmounted(() => {
-    window.removeEventListener("mousemove", updateMousePosition);
-  });
-
-  return { x, y };
-};
 export const trackBackend = async (data) => {
   const configData = {
     APP_ID: data.APP_ID,
@@ -79,10 +30,8 @@ export const trackBackend = async (data) => {
     "event/backend"
   );
 };
-
+let configData = {};
 export default async function tracker(Vue, options, router) {
-  const inactivityTimeout = options.inactivityTimeout || 3000;
-
   if (!options.APP_ID) {
     throw new Error("Please provide the APP_ID");
   }
@@ -145,3 +94,39 @@ export default async function tracker(Vue, options, router) {
     },
   });
 }
+
+export const useMousePosition = async (options) => {
+  if (!options.APP_ID) {
+    throw new Error("Please provide the APP_ID");
+  }
+
+  const x = ref(0);
+  const y = ref(0);
+
+  const updateMousePosition = throttle((event) => {
+    x.value = event.clientX;
+    y.value = event.clientY;
+
+    sendEvent(
+      {
+        ...configData,
+        type: "mouse",
+        data: {
+          x: event.clientX,
+          y: event.clientY,
+        },
+      },
+      "event/front"
+    );
+  }, 100);
+
+  onMounted(() => {
+    window.addEventListener("mousemove", updateMousePosition);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener("mousemove", updateMousePosition);
+  });
+
+  return { x, y };
+};
