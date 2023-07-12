@@ -29,12 +29,14 @@ export const trackBackend = async (data) => {
   );
 };
 
-export const trackFrontend = async ({config, data}) => {
+export const trackFrontend = async ({ config, data }) => {
+  const idVisitor = (await (await FingerprintJS.load()).get()).visitorId;
   const configData = {
     APP_ID: config.APP_ID,
     APP_SECRET: config.APP_SECRET,
     service: config.service || "website",
     type: config.type || "pageview",
+    visitorId: idVisitor,
   };
   sendEvent(
     {
