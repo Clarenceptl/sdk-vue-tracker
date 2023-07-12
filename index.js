@@ -41,7 +41,7 @@ export const trackFrontend = async ({config, data}) => {
       ...configData,
       data,
     },
-    "event/frontend"
+    "event/front"
   );
 };
 
