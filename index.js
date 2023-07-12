@@ -42,7 +42,7 @@ export default async function tracker(Vue, options, router) {
   if (!idVisitor) {
     throw new Error("Error id visitor");
   }
-  const configData = {
+  configData = {
     APP_ID: options.APP_ID,
     service: options.service || "website",
     visitorId: idVisitor,
