@@ -95,15 +95,17 @@ export default async function tracker(Vue, options, router) {
   });
 }
 
-export const useMousePosition = async (options) => {
-  console.log(options);
+export async function useMousePosition(options) {
+  console.log("useMousePosition");
+  console.log(options, "gegjhgjh");
+  console.log(configData);
   if (!options.APP_ID) {
     throw new Error("Please provide the APP_ID");
   }
 
   const x = ref(0);
   const y = ref(0);
-  console.log(options);
+
   const updateMousePosition = throttle((event) => {
     x.value = event.clientX;
     y.value = event.clientY;
@@ -130,4 +132,4 @@ export const useMousePosition = async (options) => {
   });
 
   return { x, y };
-};
+}
