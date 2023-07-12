@@ -102,7 +102,7 @@ export const useMousePosition = async (options) => {
 
   const x = ref(0);
   const y = ref(0);
-
+  console.log(options);
   const updateMousePosition = throttle((event) => {
     x.value = event.clientX;
     y.value = event.clientY;
