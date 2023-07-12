@@ -30,7 +30,7 @@ export const trackBackend = async (data) => {
     "event/backend"
   );
 };
-let configData = {};
+
 export default async function tracker(Vue, options, router) {
   if (!options.APP_ID) {
     throw new Error("Please provide the APP_ID");
@@ -42,7 +42,7 @@ export default async function tracker(Vue, options, router) {
   if (!idVisitor) {
     throw new Error("Error id visitor");
   }
-  configData = {
+  const configData = {
     APP_ID: options.APP_ID,
     service: options.service || "website",
     visitorId: idVisitor,
@@ -102,6 +102,21 @@ export async function useMousePosition(options) {
   if (!options.APP_ID) {
     throw new Error("Please provide the APP_ID");
   }
+
+  const uaParser = new UAParser();
+  const idVisitor = (await (await FingerprintJS.load()).get()).visitorId;
+
+  if (!idVisitor) {
+    throw new Error("Error id visitor");
+  }
+  const configData = {
+    APP_ID: options.APP_ID,
+    service: options.service || "website",
+    visitorId: idVisitor,
+    uaParser: uaParser.getResult(),
+    session: 1,
+    // api endpoint
+  };
 
   const x = ref(0);
   const y = ref(0);
