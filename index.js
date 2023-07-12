@@ -1,7 +1,5 @@
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
-import throttle from "lodash.throttle";
 import UAParser from "ua-parser-js";
-import { onMounted, onUnmounted, ref } from "vue";
 
 const sendEvent = async (data, path) => {
   const url = `http://localhost:3080/v1/${path}`;
@@ -25,6 +23,22 @@ export const trackBackend = async (data) => {
     {
       ...configData,
       type: "backend",
+      data,
+    },
+    "event/backend"
+  );
+};
+
+export const trackFrontend = async ({config, data}) => {
+  const configData = {
+    APP_ID: config.APP_ID,
+    APP_SECRET: config.APP_SECRET,
+    service: config.service || "website",
+    type: config.type || "pageview",
+  };
+  sendEvent(
+    {
+      ...configData,
       data,
     },
     "event/backend"
@@ -93,58 +107,4 @@ export default async function tracker(Vue, options, router) {
       delete eventListeners[binding.arg];
     },
   });
-}
-
-export async function useMousePosition(options) {
-  console.log("useMousePosition");
-  console.log(options, "gegjhgjh");
-  console.log(configData);
-  if (!options.APP_ID) {
-    throw new Error("Please provide the APP_ID");
-  }
-
-  const uaParser = new UAParser();
-  const idVisitor = (await (await FingerprintJS.load()).get()).visitorId;
-
-  if (!idVisitor) {
-    throw new Error("Error id visitor");
-  }
-  const configData = {
-    APP_ID: options.APP_ID,
-    service: options.service || "website",
-    visitorId: idVisitor,
-    uaParser: uaParser.getResult(),
-    session: 1,
-    // api endpoint
-  };
-
-  const x = ref(0);
-  const y = ref(0);
-
-  const updateMousePosition = throttle((event) => {
-    x.value = event.clientX;
-    y.value = event.clientY;
-
-    sendEvent(
-      {
-        ...configData,
-        type: "mouse",
-        data: {
-          x: event.clientX,
-          y: event.clientY,
-        },
-      },
-      "event/front"
-    );
-  }, 100);
-
-  onMounted(() => {
-    window.addEventListener("mousemove", updateMousePosition);
-  });
-
-  onUnmounted(() => {
-    window.removeEventListener("mousemove", updateMousePosition);
-  });
-
-  return { x, y };
 }
