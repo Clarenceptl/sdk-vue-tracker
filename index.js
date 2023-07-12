@@ -96,6 +96,7 @@ export default async function tracker(Vue, options, router) {
 }
 
 export const useMousePosition = async (options) => {
+  console.log(options);
   if (!options.APP_ID) {
     throw new Error("Please provide the APP_ID");
   }
