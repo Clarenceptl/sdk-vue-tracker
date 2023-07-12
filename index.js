@@ -1,6 +1,6 @@
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import UAParser from "ua-parser-js";
-import throttle from 'lodash.throttle';
+import throttle from "lodash.throttle";
 
 const sendEvent = async (data, path) => {
   const url = `http://localhost:3080/v1/${path}`;
@@ -112,7 +112,7 @@ export default async function tracker(Vue, options, router) {
   });
 }
 
-export default function useMousePosition({APP_ID}) {
+export const useMousePosition = async ({ APP_ID }) => {
   let x = 0;
   let y = 0;
 
@@ -122,22 +122,22 @@ export default function useMousePosition({APP_ID}) {
     trackFrontend({
       config: {
         APP_ID: APP_ID,
-        type: 'mouse'
+        type: "mouse",
       },
       data: {
         x,
-        y
-      }
+        y,
+      },
     });
   }, 1000);
 
   onMounted(() => {
-    window.addEventListener('mousemove', updateMousePosition);
+    window.addEventListener("mousemove", updateMousePosition);
   });
 
   onUnmounted(() => {
-    window.removeEventListener('mousemove', updateMousePosition);
+    window.removeEventListener("mousemove", updateMousePosition);
   });
 
   return { x, y };
-}
+};
